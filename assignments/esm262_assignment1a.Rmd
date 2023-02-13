@@ -1,0 +1,3 @@
+I decided to take ESM 262 because I want more in-depth knowledge on how to use R. Learning to create packages will help to speed up future data analysis, and make it more accurate. I imagine it will also look good on my resume. ;) Additionally, I feel as if I need a bit of a refresher in coding.
+
+I took both 206 and 244 (advanced data science) last year, and enjoyed them. However, my Eco-E project hasn't required any coding, so I feel like my skills are eroding. I'm hoping that getting into the meat of this class gets me back into the swing of R things.
