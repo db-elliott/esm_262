@@ -1,0 +1,59 @@
+---
+title: "Function Practice"
+author: "Deanna Elliott"
+date: '2023-02-22'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo =TRUE)
+knitr::opts_chunk$set(error=TRUE)
+library(tidyverse)
+```
+
+One of the equations used to compute automobile fuel efficiency is as follows this is the power required to keep a car moving at a given speed is as follows:
+
+Pb=crolling∗m∗g∗V+12∗A∗pair∗cdrag∗V^3
+
+where crolling and cdrag are rolling and aerodynamic resistive coefficients, typical values are 0.015 and 0.3, respectively.
+
+V: is vehicle speed (assuming no headwind) in m/s (or mps) 
+
+m: is vehicle mass in kg
+
+A is surface area of car (m2)
+
+g: is acceleration due to gravity (9.8m/s2)
+
+p_air = density of air (1.2kg/m3)
+
+Pb is power in Watts
+
+### Write a function to compute power, given a truck of m=31752 kg (parameters for a heavy truck) for a range of different highway speeds.
+
+The surface area of this truck is 16 m2
+30 m/s
+80 km/hr
+120 km/hr
+40 km/hr
+5 km/hr
+
+```{r}
+
+fuel_eff(A = 16, c_drag = 0.3, c_roll = 0.015, g = 9.8, m = 31752, p_air = 1.2, V = c(30,80, 120, 40, 5))
+
+#217786.32 
+#1847963.52 
+#5536745.28  
+#371021.76   
+#23697.72
+
+
+```
+
+
+### Plot power as a function of speed
+
+### Recompute for a lighter vehicle (15,000 kg) Add a second line to your graph for lighter vehicle
+
+Keep your function in its own file, store it in a subdirectory called R and then create a separate Rmarkdown document to use the function and store the Rmarkdown in a different directory
