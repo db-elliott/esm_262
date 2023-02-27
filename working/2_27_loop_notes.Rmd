@@ -1,0 +1,86 @@
+---
+title: "2/27 Notes"
+author: "Deanna Elliott"
+date: '2023-02-27'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+```
+
+```{r speed example loop}
+
+speeds = runif(min=0, max=100, n=300)
+
+maxspeed=0
+for ( i  in 1:length(speeds)) {
+  maxspeed = ifelse(speeds[i] > maxspeed, speeds[i], maxspeed)
+}
+
+maxspeed
+```
+```{r}
+
+max(speeds)
+```
+FERTILIZER EXAMPLE
+
+Try this - make a random sample of fertilizer application, 10 values with mean of 5 and standard deviation of 0.5
+
+Task 1: Use a for loop to compute the total yield after 10 years
+TP is 20cm
+
+```{r 10 years}
+
+fertilizer <- rnorm(n = 10, mean = 5, sd = 0.5)
+TP = 20
+
+crop = data.frame(fertilizer=fertilizer)
+crop$yield = NA
+
+for (yr in 1:10) {
+  crop$yield[yr] = 1.8*fertilizer[yr]^2 - 0.5*fertilizer[yr]  + 0.1*TP
+}
+
+sum(crop$yield)
+
+```
+
+
+Task 2: create a function to that takes as input a single value for annual fertilizer and annual total precipitation and returns yield
+
+```{r annual yield}
+
+# calc_yield = function(fertilizer, TP){
+#  yield = (1.8*fertilizer^2)-0.5*fertilizer + 0.1*TP
+#  return(yield)
+# }
+
+calc_yield(fertilizer, TP)
+
+sum(calc_yield(fertilizer, TP))
+```
+
+
+Task 3: modify your function so that it returns total yield if the user inputs a vector of fertilizer and a vector of precipitation
+
+Check that function returns the same result as your original for loop
+
+Add some error checking and test
+
+
+```{r vector yield}
+
+# calc_total_yield = function(fertilizer, TP){
+#  yield = (1.8*fertilizer^2)-0.5*fertilizer + 0.1*TP
+#  total = sum(yield)
+#  return(total)
+# }
+
+calc_total_yield(fertilizer, TP)
+
+```
+
