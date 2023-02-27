@@ -54,6 +54,23 @@ fuel_eff(A = 16, c_drag = 0.3, c_roll = 0.015, g = 9.8, m = 31752, p_air = 1.2, 
 
 ### Plot power as a function of speed
 
+```{r}
+power <- c(217786.32, 1847963.52, 5536745.28,  371021.76,   23697.72)
+df_power <- data.frame(power)
+
+ggplot(df_power, aes(power)) +
+  stat_function(fun = fuel_eff(
+```
+
+
 ### Recompute for a lighter vehicle (15,000 kg) Add a second line to your graph for lighter vehicle
+
+```{r}
+
+#recalculate for lighter vehicle
+
+fuel_eff(A = 16, c_drag = 0.3, c_roll = 0.015, g = 9.8, m = 15000, p_air = 1.2, V = c(30,80, 120, 40, 5))
+```
+
 
 Keep your function in its own file, store it in a subdirectory called R and then create a separate Rmarkdown document to use the function and store the Rmarkdown in a different directory
