@@ -55,6 +55,9 @@ powerall1 = as.data.frame(matrix(nrow=length(speeds), ncol=nrow(possible_cars)))
 # because we don't initialize it - values are NA
 head(powerall1)
 
+# source autopower function
+source("C:/Users/deann/Box/Winter 2023/esm_262/R/autopower.R")
+
 # index in to a matrix (powerall1)
 for (i in 1:nrow(possible_cars)) {
   powerall1[,i] = autopower(A=possible_cars$area[i], m=possible_cars$mass[i], V=speeds)
@@ -69,21 +72,25 @@ colnames(powerall1)=possible_cars$name
 powerallr1 = powerall1 %>% pivot_longer(cols=everything(), names_to="car", values_to="power")
 head(powerallr1)
 
-mean(powerall1$A)    # 112,902 W
-mean(powerall1$B)    # 329,503 W
-mean(powerall1$C)   # 208,598 W
-mean(powerall1$D)   # 52,873 W
-
-max(powerall1$A)    # 858,075 W
-max(powerall1$B)    # 1,608,060 W
-max(powerall1$C)    # 1,096,820 W
-max(powerall1$D)    # 393,910 W
-
 ```
 
 ```{r pmap}
 
-# use same speed distribution as above
+possible_cars
+
+# assume a log normal distribution of speeds with mean 100km/hr
+# convert km/hr to m/s
+# sample size = 200
+
+nsample = 200
+mean_speed = log(80*0.277)
+
+speeds = rlnorm(mean=mean_speed, sd=0.125*mean_speed, nsample)
+summary(speeds)
+
+plot(density(speeds), ylab="Distribution of Speeds in (m/s)")
+
+# use pmap to cycle through all speeds
 powerall2 = pmap(list(A = possible_cars$area, m=possible_cars$mass), autopower, V=speeds)
 
 # make data frame and add column names
@@ -91,22 +98,13 @@ powerall2 = as.data.frame(powerall2, col.names=possible_cars$name)
 
 # use mapply to determine power
 powerall2b = mapply(FUN=autopower, A = possible_cars$area, m=possible_cars$mass, MoreArgs = list(V=speeds))
+
 # add column names
 colnames(powerall2b)=possible_cars$name
 
-# for plotting sometimes its useful to turn columns in to rows
+# for plotting turn columns in to rows
 powerallr2 = powerall2 %>% pivot_longer(cols=everything(), names_to="car", values_to="power")
 head(powerallr2)
-
-mean(powerall2$A)    # 112,902 W
-mean(powerall2$B)    # 329,503 W
-mean(powerall2$C)   # 208,598 W
-mean(powerall2$D)   # 52,873 W
-
-max(powerall2$A)    # 858,075 W
-max(powerall2$B)    # 1,608,060 W
-max(powerall2$C)    # 1,096,820 W
-max(powerall2$D)    # 393,910 W
 
 ```
 
@@ -116,11 +114,15 @@ Create two boxplots (one for each method (FOR and pmap)) that show the range of 
 
 for_loop_plot = ggplot(powerallr1, aes(car,power, fill=car)) + 
   geom_boxplot() +
-  ggtitle("Car Power from For Loop")
+  ggtitle("Car Power (For Loop)") +
+  xlab("Car") + ylab("Power (W)") +
+  theme(legend.position = "none")
 
 mapply_plot = ggplot(powerallr2, aes(car,power, fill=car)) + 
   geom_boxplot() + 
-  ggtitle("Car Power from pmap")
+  ggtitle("Car Power (pmap)") +
+  xlab("Car") + ylab("Power (W)") +
+  theme(legend.position = "none")
 
 # put plots side by side for comparison
 ggarrange(for_loop_plot, mapply_plot)
