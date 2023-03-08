@@ -20,21 +20,29 @@ Write a function that takes a vector of fish names and always returns three item
 ```{r data}
 
 #read in data
-fish_data <- read.delim(here("assignments", "data", "fish"))
+fish_catch <- read.delim(here("assignments", "data", "fish"))
 ```
 
 ```{r}
 
 #make data a vector
-fish_data <- as.vector(fish_data[, 1])
+fish_catch <- as.vector(fish_catch[, 1])
 
 #make data a factor
-fish_data <- as.factor(fish_data)
+fish_catch <- as.factor(fish_catch)
 
-(summary(fish_data))
+(summary(fish_catch))
+
 ```
 
-```{r function}
+```{r use function}
+
+source("C:/Users/deann/Box/Winter 2023/esm_262/R/fish_counts.R")
+
+fish_counts(fish_catch)
+
+# returns "300", "salmon", and "tuna" for total_fish, dominant, and rarest
+# correct!!!
 
 ```
 
