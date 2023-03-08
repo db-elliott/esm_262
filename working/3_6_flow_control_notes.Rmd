@@ -1,0 +1,169 @@
+---
+title: "3/6 Notes"
+author: "Deanna Elliott"
+date: '2023-03-06'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r rare fish}
+
+possible.fish = c("salmon","steelhead","shark","tuna","cod")
+
+catch1 = base::sample(possible.fish, size=20, replace=T)
+
+rarestfish = names(which.min(summary(as.factor(catch1))))
+rarestfish
+```
+
+```{r graph rare fish}
+
+plottitle = sprintf("The rarest fish is %s", rarestfish)
+
+ggplot(data.frame(catch1=catch1), aes(catch1, fill=catch1))+geom_histogram(stat="count")+labs(title=plottitle)
+```
+
+## Flow Control
+
+### Correlation Test Example
+
+```{r}
+
+mycortest  = function(x,y, thresh=0.8) {
+  # compute correlation
+  res = cor(x,y)
+  classification = ifelse(res > thresh, "GOOD", "NotGood")
+  return(classification)
+}
+
+a = runif(min=1, max=100, n=100)
+b = runif(min=1, max=100, n=100)
+
+mycortest(a,b)
+```
+
+```{r}
+
+mycortest(a,a)
+```
+
+```{r}
+
+# this doesn't work - why??  Unequal lengths for x and y 
+mycortest(a, 1)
+```
+
+```{r}
+
+# useful to add error checking
+mycortest  = function(x,y, thresh=0.8) {
+  # compute correlation
+  if(length(x) != length(y)) {stop("unequal lengths for x and y")}
+  res = cor(x,y)
+  classification = ifelse(res > thresh, "GOOD", "NotGood")
+  return(classification)
+}
+mycortest(a, 1)
+```
+
+
+### With A Simple If
+
+```{r}
+
+# Simple "IF*
+# imagine we are trying to get a tuna  - lets "fish" by sampling
+possible.fish = c("salmon","steelhead","shark","tuna","cod")
+catch1 = base::sample(possible.fish, size=1, replace=T)
+catch1
+
+ifelse(catch1 == "tuna", "success", "tryagain")
+
+catch1 = "tuna"
+ifelse(catch1 == "tuna", "success", "tryagain")
+```
+
+## Multiple Alternatives
+
+```{r}
+
+fish = "steelhead"
+
+case_when((fish =="steelhead")  ~ "A", (fish =="tuna") ~ "B", !(fish == "tuna") & !(fish=="steelhead") ~ "C")
+```
+
+```{r}
+
+# apply to all of our ocean
+# start by making a function
+classify_fish = function(fish) {
+ class=  case_when((fish =="steelhead")  ~ "A", (fish =="tuna") ~ "B", !(fish == "tuna") & !(fish=="steelhead") ~ "C")
+ return(class) }
+
+classify_fish("steelhead")
+```
+
+```{r}
+
+classify_fish("cod")
+```
+
+```{r}
+
+# apply to our ocean
+possible.fish = c("salmon","steelhead","shark","tuna","cod")
+catch2 = base::sample(possible.fish, size=20, replace=T)
+catch2
+
+classify_fish(catch2)
+```
+
+## Design A Function
+
+Inputs:
+- Nutrient concentration for at least 5 days
+- Temperature for at least 5 days
+- Thresholds for temperature and nutrient (with default values)
+
+Output:
+- Mean Nutrient Concentration
+- Pollution Risk as “low”, “med” or “high”
+
+Take a look at classify_lake.R
+
+example of while
+example of flow control with if..else and case_when
+
+```{r}
+
+source("C:/Users/deann/Box/Winter 2023/esm_262/R/classify_lake.R")
+
+# generate some data to try the function
+temperature = runif(min=4, max=35, n=30)
+nutrient = runif(min=5, max=40, n=30)
+
+# try it
+res=classify_lake(temperature=temperature, nutrient=nutrient)
+
+# lets pick some numbers we know should give us a low value
+nutrient = runif(min=0, max=5, n=30)
+classify_lake(temperature=temperature, nutrient=nutrient)
+```
+
+```{r}
+
+# now try high
+# use repeat to generate the same value multiple times
+nutrient = rep(50, times=30)
+temperature = rep(25, times=30)
+classify_lake(temperature=temperature, nutrient=nutrient)
+```
+
+
+
+
+
+

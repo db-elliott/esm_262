@@ -1,0 +1,40 @@
+---
+title: "Assignment 4"
+author: "Deanna Elliott"
+date: '2023-03-06'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(here)
+```
+
+Write a function that takes a vector of fish names and always returns three items:
+- the most common fish,
+- the rarest fish
+- the total number of fish
+
+```{r data}
+
+#read in data
+fish_data <- read.delim(here("assignments", "data", "fish"))
+```
+
+```{r}
+
+#make data a vector
+fish_data <- as.vector(fish_data[, 1])
+
+#make data a factor
+fish_data <- as.factor(fish_data)
+
+(summary(fish_data))
+```
+
+```{r function}
+
+```
+
