@@ -8,6 +8,7 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
+# packages to use
 library(tidyverse)
 library(here)
 ```
@@ -17,13 +18,20 @@ Write a function that takes a vector of fish names and always returns three item
 - the rarest fish
 - the total number of fish
 
+
+```{r source function}
+
+# relevant function--aka fish count function
+source("../R/fish_counts.R")
+```
+
 ```{r data}
 
 #read in data
 fish_catch <- read.delim(here("assignments", "data", "fish"))
 ```
 
-```{r}
+```{r data wrangling}
 
 #make data a vector
 fish_catch <- as.vector(fish_catch[, 1])
@@ -31,13 +39,12 @@ fish_catch <- as.vector(fish_catch[, 1])
 #make data a factor
 fish_catch <- as.factor(fish_catch)
 
+# look at summary--aka counts of all five fish species
 (summary(fish_catch))
 
 ```
 
 ```{r use function}
-
-source("C:/Users/deann/Box/Winter 2023/esm_262/R/fish_counts.R")
 
 fish_counts(fish_catch)
 
