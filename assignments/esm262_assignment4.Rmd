@@ -28,7 +28,7 @@ source("../R/fish_counts.R")
 ```{r data}
 
 #read in data
-fish_catch <- read.delim(here("assignments", "data", "fish"))
+fish_catch <- read.delim("../data/fish")
 ```
 
 ```{r data wrangling}
