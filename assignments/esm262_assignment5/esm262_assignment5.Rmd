@@ -15,7 +15,7 @@ library(purrr)
 ```{r}
 
 #
-possible_flubber = data.frame(color = c("Pink", "Blue", "Green"), mass = c(30, 15, 43), viscosity = c(150, 1500, 4000))
+possible_flubber = data.frame(color = c("Pink", "Blue", "Green"), viscosity = c(150, 1500, 4000))
 
 ```
 
@@ -44,21 +44,50 @@ head(flub_power1)
 source("../R/flubber_power.R")
 
 
+# PROBLEM IS HERE--SAYS VISCOSITY IS AN UNUSED ARGUMENT????
 # index in to a matrix
 for (i in 1:nrow(possible_flubber)) {
-  flub_power1[,i] = flubber_power(mass=possible_flubber$mass[i], 
-                                  viscosity = possible_flubber$viscosity[i],
+  flub_power1[,i] = flubber_power(viscosity = possible_flubber$viscosity[i],
                                   rotation=rotation)
 }
 
+# change column names to flubber colors
 colnames(flub_power1)=flub_power1$color
 head(flub_power1)
+
+# convert columns to rows for plotting
+flub_powerr1 = flub_power11 %>% pivot_longer(cols=everything(), names_to="color", values_to="power")
+head(flub_powerr1)
 ```
 
 
 ```{r}
 
+possible_flubber
 
+# assume a log normal distribution of rotation speeds with mean 2.5 m/s
+# sample size = 200
+
+nsample = 200
+mean_speed = 2.5
+
+rotation = rlnorm(mean=mean_speed, sd=0.125*mean_speed, nsample)
+
+# use for loop to cycle through all rotation speeds
+# create a data frame to store for loop results: one column for each car and one row for each speed
+
+flub_power2 = as.data.frame(matrix(nrow=length(rotation),
+                            ncol=nrow(possible_flubber)))
+
+# use mapply to determine power
+flub_power2b = mapply(FUN=flubber_power, viscosity = possible_flubber$viscosity, MoreArgs = list(rotation=rotation))
+
+# add column names
+colnames(flub_power2b)=possible_flubber$color
+
+# for plotting turn columns in to rows
+flub_powerr2 = flub_power2 %>% pivot_longer(cols=everything(), names_to="color", values_to="power")
+head(flub_powerr2)
 
 ```
 

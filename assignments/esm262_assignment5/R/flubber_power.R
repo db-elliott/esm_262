@@ -11,7 +11,7 @@
 #' 
 
 
-flubber_power = function(mass, rotation, brightness = 410) {
+flubber_power = function(mass = 150, rotation, brightness = 410) {
   power = ((mass/viscosity)^brightness)/rotation
   
   hours_power = power*3600
