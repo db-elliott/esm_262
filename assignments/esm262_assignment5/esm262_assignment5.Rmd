@@ -1,0 +1,65 @@
+---
+title: "esm262_assignment5"
+author: "Deanna Elliott"
+date: '2023-03-08'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(purrr)
+```
+
+```{r}
+
+#
+possible_flubber = data.frame(color = c("Pink", "Blue", "Green"), mass = c(30, 15, 43), viscosity = c(150, 1500, 4000))
+
+```
+
+```{r for loop}
+
+possible_flubber
+
+# assume a log normal distribution of rotation speeds with mean 2.5 m/s
+# sample size = 200
+
+nsample = 200
+mean_speed = 2.5
+
+rotation = rlnorm(mean=mean_speed, sd=0.125*mean_speed, nsample)
+
+# use for loop to cycle through all rotation speeds
+# create a data frame to store for loop results: one column for each car and one row for each speed
+
+flub_power1 = as.data.frame(matrix(nrow=length(rotation),
+                            ncol=nrow(possible_flubber)))
+
+# because we don't initialize it - values are NA
+head(flub_power1)
+
+# source flubber_power function
+source("../R/flubber_power.R")
+
+
+# index in to a matrix
+for (i in 1:nrow(possible_flubber)) {
+  flub_power1[,i] = flubber_power(mass=possible_flubber$mass[i], 
+                                  viscosity = possible_flubber$viscosity[i],
+                                  rotation=rotation)
+}
+
+colnames(flub_power1)=flub_power1$color
+head(flub_power1)
+```
+
+
+```{r}
+
+
+
+```
+
+
