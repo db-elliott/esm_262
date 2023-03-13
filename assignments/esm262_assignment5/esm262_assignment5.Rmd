@@ -26,7 +26,7 @@ possible_flubber
 # assume a log normal distribution of rotation speeds with mean 2.5 m/s
 # sample size = 200
 
-nsample = 3
+nsample = 50
 mean_speed = 2.5
 
 rotation = rlnorm(mean=mean_speed, sd=0.125*mean_speed, nsample)
@@ -43,14 +43,20 @@ colnames(flub_power1)=possible_flubber$color
 head(flub_power1)
 
 # source flubber_power function
-source("../R/flubber_power.R")
-### FIGURE OUT PROPER SOURCE CODE
+source("R/flubber_power.R")
+
+for (i in seq_along(possible_flubber$viscosity)) {
+  result <- flubber_power(viscosity = flubber_power$viscosity[i], mass = 150, 
+                          brightness = 410)
+  results[[i]] <- result
+}
 
 # index in to a matrix
-for (i in 1:nrow(possible_flubber)) {
-  flub_power1[,i] = flubber_power(viscosity = possible_flubber$viscosity[i],
+#for (i in 1:nrow(possible_flubber)) {
+ # flub_power1[,i] = flubber_power(viscosity = possible_flubber$viscosity[i],
                                   rotation=rotation)
-}
+#}
+
 ### Warning: provided 2 variables to replace 1 variable ???
 ```
 

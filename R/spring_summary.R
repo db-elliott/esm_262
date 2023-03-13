@@ -4,7 +4,8 @@
 #' @param clim_data  data frame with columns tavg (C)
 #'	 year, month (integer), day
 #' @param spring_months (vector of integers) to include in spring; default 4,5,6
-#' @param spring_out (default FALSE) set to TRUE to output average spring precip and temperature for all years
+#' @param spring_out (default FALSE) set to TRUE to output average spring 
+#' precip and temperature for all years
 #' @return returns list of extremes
 #' \describe{
 #'  \item{Tavg_spring}{mean_springT mean spring temperature (C)}
