@@ -14,89 +14,58 @@ library(purrr)
 
 ```{r}
 
-#
-possible_flubber = data.frame(color = c("Pink", "Blue", "Green"), viscosity = c(150, 1500, 4000))
-
-```
-
-```{r for loop}
-
-possible_flubber
-
-# assume a log normal distribution of rotation speeds with mean 2.5 m/s
-# sample size = 200
-
-nsample = 50
-mean_speed = 2.5
-
-rotation = rlnorm(mean=mean_speed, sd=0.125*mean_speed, nsample)
-
-# use for loop to cycle through all rotation speeds
-# create a data frame to store for loop results: one column for each color and one row for each rotation speed
-
-flub_power1 = as.data.frame(matrix(nrow=length(rotation),
-                            ncol=nrow(possible_flubber)))
-
-# because we don't initialize it - values are NA
-# change column names to flubber colors 
-colnames(flub_power1)=possible_flubber$color
-head(flub_power1)
-
 # source flubber_power function
 source("R/flubber_power.R")
 
-for (i in seq_along(possible_flubber$viscosity)) {
-  result <- flubber_power(viscosity = flubber_power$viscosity[i], mass = 150, 
-                          brightness = 410)
-  results[[i]] <- result
+#calculate power generated from a flubber sample with mass 10g (parameter), viscosity 250 cP (input), rotation speed 3.5 m/s (input), exposed to 210 lumens of brightness (parameter)
+
+flubber_power(viscosity = 250, rotation = 3.5)
+
+```
+
+We have three samples of flubber, each with a mass of 10g, rotation speed of 2.5, and exposure to 210 lumens of brightness. Each has a different viscosity.
+
+```{r for loop}
+
+viscosity_vec <- c(150, 1500, 5000)
+
+results <- list()
+
+# loop viscosity vector for power generation
+for (i in seq_along(viscosity_vec)) {
+  result <- flubber_power(viscosity = viscosity_vec[i], rotation = 2.5, mass = 10, brightness = 210)
+  results[[i]] <- results
 }
 
-# index in to a matrix
-#for (i in 1:nrow(possible_flubber)) {
- # flub_power1[,i] = flubber_power(viscosity = possible_flubber$viscosity[i],
-                                  rotation=rotation)
-#}
+head(results) ### Nothing ???
 
-### Warning: provided 2 variables to replace 1 variable ???
+flub_df <- data.frame(viscosity = viscosity, power_gen = sapply(results))
+### Nothing is happening ???
+
 ```
 
 ```{r plot}
 
-# convert columns to rows for plotting
-flub_power_p1 = flub_power1 %>% pivot_longer(cols=everything(), names_to="color", values_to="power")
-head(flub_powerr1)
+# create bar plot: viscosity vs power generated
+ggplot(flub_df, aes(x = viscosity, y = power_gen)) +
+  geom_bar(stat = "identity", fill= "viscosity") +
+  labs(x = "Viscosity (cP)", y = "Power Generated (W)")
 
-# create boxplot
-for_loop_plot = ggplot(flub_power_p1, aes(color, power, fill=color)) + 
-  geom_boxplot() +
-  ggtitle("Flubber Power Generation By Color") +
-  xlab("Flubber") + ylab("Power (W)") +
-  theme(legend.position = "none")
 ```
 
+We have three samples of flubber, each with a mass of 10g and exposure to 210 lumens of brightness. Each has a different viscosity and rotation speed.
 
 ```{r pmap}
 
-possible_flubber
+# flubber samples
+viscosity_vec2 <- c(500, 1000, 1500)
+rotation_vec <- c(2.5, 5, 10)
 
-# assume a log normal distribution of rotation speeds with mean 2.5 m/s
-# sample size = 200
+#run a pmap for sample vectors
+power = pmap(list(viscosity = viscosity_vec2, rotation = rotation_vec),
+             flubber_power)
 
-nsample = 3
-mean_speed = 2.5
-
-rotation = rlnorm(mean=mean_speed, sd=0.125*mean_speed, nsample)
-
-# use pmap to cycle through all rotation speeds
-# create a data frame to store results: one column for each color and one row for each rotation speed
-flub_power2 = as.data.frame(matrix(nrow=length(rotation),
-                            ncol=nrow(possible_flubber)))
-
-# use mapply to determine power generated
-flub_power2b = mapply(FUN=flubber_power, viscosity = possible_flubber$viscosity, MoreArgs = list(rotation=rotation))
-
-# add column names
-colnames(flub_power2b)=possible_flubber$color
+power
 
 ```
 
