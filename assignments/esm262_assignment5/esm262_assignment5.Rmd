@@ -40,7 +40,7 @@ for (i in seq_along(viscosity_vec)) {
 
 head(results)
 
-flub_df <- data.frame(viscosity = viscosity, power_gen = sapply(results, "[[", "power_lvl"))
+flub_df <- data.frame(viscosity = viscosity_vec, power_gen = sapply(results, "[[", "power_lvl"))
 ### ERROR: ARGUMENTS IMPLY DIFFERING NUMBER OF ROWS: 3, 0  ????
 ```
 
