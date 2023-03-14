@@ -10,6 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 library(tidyverse)
 library(purrr)
+library(testthat)
 ```
 
 ```{r}
@@ -34,14 +35,13 @@ results <- list()
 # loop viscosity vector for power generation
 for (i in seq_along(viscosity_vec)) {
   result <- flubber_power(viscosity = viscosity_vec[i], rotation = 2.5, mass = 10, brightness = 210)
-  results[[i]] <- results
+  results[[i]] <- result
 }
 
-head(results) ### Nothing ???
+head(results)
 
-flub_df <- data.frame(viscosity = viscosity, power_gen = sapply(results))
-### Nothing is happening ???
-
+flub_df <- data.frame(viscosity = viscosity, power_gen = sapply(results, "[[", "power_lvl"))
+### ERROR: ARGUMENTS IMPLY DIFFERING NUMBER OF ROWS: 3, 0  ????
 ```
 
 ```{r plot}
