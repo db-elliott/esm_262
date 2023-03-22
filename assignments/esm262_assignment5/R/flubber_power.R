@@ -18,5 +18,5 @@ flubber_power = function(mass = 10, viscosity, rotation, brightness = 210) {
   # 3600 s/hr
   total_power = power_lvl*3600*5
   
-  return(list(power_lvl, total_power))
+  return(c(power_lvl, total_power))
 }
